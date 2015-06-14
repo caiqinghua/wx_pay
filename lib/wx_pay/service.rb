@@ -21,6 +21,23 @@ module WxPay
 
       r
     end
+    
+    GENERATE_JSAPI_PAY_REQ_REQUIRED_FIELDS = %i(appId timeStamp nonceStr package signType)
+    def self.generate_jsapi_pay_req(_prepay_id)
+      params = {
+        appId: WxPay.appid,
+        timeStamp: Time.now.to_i.to_s,
+        nonceStr: SecureRandom.uuid.tr('-', ''),
+        package: "prepay_id=#{_prepay_id}"
+        signType: "MD5"
+      }
+
+      check_required_options(params, GENERATE_JSAPI_PAY_REQ_REQUIRED_FIELDS)
+
+      params[:paySign] = WxPay::Sign.generate(params)
+
+      params
+    end
 
     GENERATE_APP_PAY_REQ_REQUIRED_FIELDS = %i(prepayid noncestr)
     def self.generate_app_pay_req(params)
