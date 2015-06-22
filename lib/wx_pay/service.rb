@@ -15,6 +15,8 @@ module WxPay
 
       check_required_options(params, INVOKE_UNIFIEDORDER_REQUIRED_FIELDS)
 
+      params[:sign] = WxPay::Sign.generate(params)
+
       r = invoke_remote("#{GATEWAY_URL}/unifiedorder", make_payload(params))
 
       yield r if block_given?
@@ -64,7 +66,7 @@ module WxPay
     end
 
     def self.make_payload(params)
-      "<xml>#{params.map { |k, v| "<#{k}>#{v}</#{k}>" }.join}<sign>#{WxPay::Sign.generate(params)}</sign></xml>"
+      "<xml>#{params.map { |k, v| "<#{k}>#{v}</#{k}>" }.join}</xml>"
     end
 
     def self.invoke_remote(url, payload)
