@@ -18,7 +18,7 @@ class WxPay::SignTest < MiniTest::Test
   end
 
   def test_generate_sign
-    assert_equal @sign, WxPay::Sign.generate(@params)
+    assert_equal @sign, WxPay::Sign.generate(@params, WxPay.key)
   end
 
   def test_verify_sign
