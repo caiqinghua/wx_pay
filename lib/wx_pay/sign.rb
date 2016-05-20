@@ -10,11 +10,11 @@ module WxPay
       Digest::MD5.hexdigest("#{query}&key=#{_mch_api_key}").upcase
     end
 
-    def self.verify?(params)
+    def self.verify?(params, _mch_api_key = WxPay.key)
       params = params.dup
       sign = params.delete('sign') || params.delete(:sign)
 
-      generate(params) == sign
+      generate(params, _mch_api_key) == sign
     end
   end
 end
